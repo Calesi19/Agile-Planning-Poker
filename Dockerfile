@@ -14,8 +14,7 @@ RUN npm ci
 COPY frontend/poker/ ./
 
 # Build frontend for production
-# Use empty VITE_API_URL to make API calls relative to same origin
-ENV VITE_API_URL=""
+# In production mode, the app will use window.location.origin for API calls
 RUN npm run build
 
 # Stage 2: Build Backend
