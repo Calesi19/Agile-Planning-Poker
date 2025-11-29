@@ -23,7 +23,7 @@ npm run preview             # Preview production build
 
 ### Environment Setup
 - Backend requires .NET 9.0 SDK
-- Frontend requires Node.js 18+
+- Frontend requires Node.js 20.19+ or 22.12+ (due to rolldown-vite dependency)
 - Frontend needs `.env` file with `VITE_API_URL=http://localhost:5000` (copy from `.env.example`)
 
 ## Architecture Overview
