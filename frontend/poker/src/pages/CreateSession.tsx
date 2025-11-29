@@ -2,7 +2,6 @@ import { useState } from "preact/hooks";
 import { route } from "preact-router";
 import type { RoutableProps } from "preact-router";
 import { api } from "../lib/api";
-import { storage } from "../lib/storage";
 import type { EstimationScale } from "../types";
 
 const SCALE_OPTIONS: { value: EstimationScale; label: string; description: string }[] = [
@@ -29,7 +28,6 @@ const SCALE_OPTIONS: { value: EstimationScale; label: string; description: strin
 ];
 
 export function CreateSession(_props: RoutableProps) {
-  const [hostName, setHostName] = useState(storage.getDisplayName());
   const [scale, setScale] = useState<EstimationScale>("fibonacci");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -37,17 +35,11 @@ export function CreateSession(_props: RoutableProps) {
   const handleSubmit = async (e: Event) => {
     e.preventDefault();
     setError("");
-
-    if (!hostName.trim()) {
-      setError("Please enter your name");
-      return;
-    }
-
     setLoading(true);
 
     try {
-      storage.setDisplayName(hostName.trim());
-      const session = await api.createSession(scale, hostName.trim());
+      // Host doesn't need a display name since they won't appear in the participant grid
+      const session = await api.createSession(scale, "Host");
 
       route(
         `/host/${session.sessionCode}?participantId=${session.participantId}&scale=${session.scale}`
@@ -73,20 +65,6 @@ export function CreateSession(_props: RoutableProps) {
           <p class="text-gray-600 mb-8">Set up a new planning poker session</p>
 
           <form onSubmit={handleSubmit} class="space-y-6">
-            <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">
-                Your Name
-              </label>
-              <input
-                type="text"
-                value={hostName}
-                onInput={(e) => setHostName((e.target as HTMLInputElement).value)}
-                placeholder="Enter your display name"
-                class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-500 focus:outline-none text-lg"
-                disabled={loading}
-              />
-            </div>
-
             <div>
               <label class="block text-sm font-semibold text-gray-700 mb-3">
                 Estimation Method
