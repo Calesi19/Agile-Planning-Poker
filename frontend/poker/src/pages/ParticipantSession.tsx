@@ -104,16 +104,30 @@ export function ParticipantSession({ code, participantId, scale }: ParticipantSe
     <div class="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-4">
       <div class="max-w-4xl mx-auto">
         {/* Header */}
-        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 md:p-6 mb-6 text-white">
-          <div class="text-center">
-            <div class="text-sm opacity-80 mb-1">Session Code</div>
-            <div class="text-3xl md:text-4xl font-bold tracking-wider mb-3">{code}</div>
-            {participantName && (
-              <div class="text-lg">
-                <span class="opacity-80">You are:</span>{" "}
-                <span class="font-semibold">{participantName}</span>
+        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 mb-6 text-white">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <div>
+                <span class="text-xs opacity-80">Session</span>
+                <div class="text-2xl font-bold tracking-wider">{code}</div>
               </div>
-            )}
+              {participantName && (
+                <div class="border-l border-white/30 pl-4">
+                  <span class="text-xs opacity-80">You</span>
+                  <div class="text-lg font-semibold">{participantName}</div>
+                </div>
+              )}
+            </div>
+            <button
+              onClick={() => {
+                if (confirm("Are you sure you want to leave this session?")) {
+                  route("/");
+                }
+              }}
+              class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+            >
+              Leave
+            </button>
           </div>
         </div>
 
