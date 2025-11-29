@@ -115,18 +115,15 @@ export function HostSession({ code, participantId, scale }: HostSessionProps) {
         {/* Header */}
         <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-6 text-white">
           <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <h1 class="text-3xl font-bold mb-2">Host View</h1>
-              <div class="flex items-center gap-4">
-                <div>
-                  <span class="text-sm opacity-80">Session Code:</span>
-                  <div class="text-4xl font-bold tracking-wider">{code}</div>
-                </div>
-                <div>
-                  <span class="text-sm opacity-80">Method:</span>
-                  <div class="text-xl font-semibold capitalize">
-                    {scale?.replace(/([A-Z])/g, " $1").trim()}
-                  </div>
+            <div class="flex items-center gap-6">
+              <div>
+                <span class="text-sm opacity-80">Session Code:</span>
+                <div class="text-4xl font-bold tracking-wider">{code}</div>
+              </div>
+              <div>
+                <span class="text-sm opacity-80">Method:</span>
+                <div class="text-xl font-semibold capitalize">
+                  {scale?.replace(/([A-Z])/g, " $1").trim()}
                 </div>
               </div>
             </div>
