@@ -12,6 +12,7 @@ export function App() {
       <Home path="/" />
       <CreateSession path="/create" />
       <JoinSession path="/join" />
+      <JoinSession path="/join/:code" />
       <HostSession path="/host/:code" />
       <ParticipantSession path="/participant/:code" />
     </Router>

@@ -1,14 +1,25 @@
-import { useState } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
 import { route } from "preact-router";
 import type { RoutableProps } from "preact-router";
 import { api } from "../lib/api";
 import { storage } from "../lib/storage";
 
-export function JoinSession(_props: RoutableProps) {
+interface JoinSessionProps extends RoutableProps {
+  code?: string;
+}
+
+export function JoinSession({ code }: JoinSessionProps) {
   const [name, setName] = useState(storage.getDisplayName());
   const [sessionCode, setSessionCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Pre-fill session code if provided in URL
+  useEffect(() => {
+    if (code) {
+      setSessionCode(code.toUpperCase());
+    }
+  }, [code]);
 
   const handleSubmit = async (e: Event) => {
     e.preventDefault();

@@ -4,6 +4,7 @@ import type { RoutableProps } from "preact-router";
 import { PlanningPokerConnection } from "../lib/signalr";
 import { RevealCard } from "../components/RevealCard";
 import type { Participant, VoteStatus, RevealResponse } from "../types";
+import { QRCodeSVG } from "qrcode.react";
 
 interface HostSessionProps extends RoutableProps {
   code?: string;
@@ -100,6 +101,8 @@ export function HostSession({ code, participantId, scale }: HostSessionProps) {
   const votedCount = voteStatuses.filter((s) => s.hasVoted && !s.isHost).length;
   const totalCount = participants.filter((p) => !p.isHost).length;
   const canReveal = !revealed;
+  const joinUrl = `${window.location.origin}/#/join/${code}`;
+  const [showQRModal, setShowQRModal] = useState(false);
 
   if (loading) {
     return (
@@ -116,6 +119,19 @@ export function HostSession({ code, participantId, scale }: HostSessionProps) {
         <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-6 text-white">
           <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div class="flex items-center gap-6">
+              {/* QR Code - Clickable */}
+              <button
+                onClick={() => setShowQRModal(true)}
+                class="bg-white p-2 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                title="Click to view QR code"
+              >
+                <QRCodeSVG
+                  value={joinUrl}
+                  size={60}
+                  level="M"
+                  includeMargin={false}
+                />
+              </button>
               <div>
                 <span class="text-sm opacity-80">Session Code:</span>
                 <div class="text-4xl font-bold tracking-wider">{code}</div>
@@ -260,6 +276,54 @@ export function HostSession({ code, participantId, scale }: HostSessionProps) {
             </div>
           </div>
         </div>
+
+        {/* QR Code Modal */}
+        {showQRModal && (
+          <div
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            onClick={() => setShowQRModal(false)}
+          >
+            <div
+              class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Join Session</h2>
+                <button
+                  onClick={() => setShowQRModal(false)}
+                  class="text-gray-400 hover:text-gray-600 text-3xl leading-none"
+                >
+                  ×
+                </button>
+              </div>
+
+              <div class="flex flex-col items-center gap-6">
+                {/* Large QR Code */}
+                <div class="bg-white p-4 rounded-2xl border-4 border-gray-200">
+                  <QRCodeSVG
+                    value={joinUrl}
+                    size={256}
+                    level="H"
+                    includeMargin={true}
+                  />
+                </div>
+
+                {/* Session Code */}
+                <div class="text-center">
+                  <p class="text-sm text-gray-600 mb-2">Session Code:</p>
+                  <div class="text-5xl font-bold text-indigo-600 tracking-wider">
+                    {code}
+                  </div>
+                </div>
+
+                {/* Instructions */}
+                <div class="text-center text-sm text-gray-500 max-w-sm">
+                  <p>Scan the QR code or share the session code with participants to join</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
