@@ -2,6 +2,7 @@ import { useState, useEffect } from "preact/hooks";
 import { route } from "preact-router";
 import type { RoutableProps } from "preact-router";
 import { PlanningPokerConnection } from "../lib/signalr";
+import { RevealCard } from "../components/RevealCard";
 import type { Participant, VoteStatus, RevealResponse } from "../types";
 
 interface HostSessionProps extends RoutableProps {
@@ -142,60 +143,43 @@ export function HostSession({ code, participantId, scale }: HostSessionProps) {
           <div class="bg-red-500 text-white px-4 py-3 rounded-xl mb-6">{error}</div>
         )}
 
-        <div class="grid md:grid-cols-3 gap-6">
-          {/* Participants Panel */}
-          <div class="md:col-span-2">
-            <div class="bg-white rounded-2xl shadow-xl p-6">
-              <h2 class="text-2xl font-bold text-gray-800 mb-4">
-                Participants ({totalCount})
-              </h2>
-
-              <div class="space-y-2">
-                {(revealed ? revealData?.votes || [] : voteStatuses).map((item) => {
-                  const hasVoted = "hasVoted" in item ? item.hasVoted : true;
-                  const value = "value" in item ? item.value : "";
-
-                  return (
-                    <div
-                      key={item.participantId}
-                      class="flex items-center justify-between p-4 bg-gray-50 rounded-xl"
-                    >
-                      <div class="flex items-center gap-3">
-                        <div class="text-lg font-semibold text-gray-800">
-                          {item.name}
-                          {item.isHost && (
-                            <span class="ml-2 text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">
-                              HOST
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                      <div>
-                        {revealed && value ? (
-                          <div class="text-2xl font-bold text-indigo-600 bg-indigo-100 px-4 py-2 rounded-lg">
-                            {value}
-                          </div>
-                        ) : hasVoted ? (
-                          <span class="text-green-600 font-semibold flex items-center gap-2">
-                            <span class="w-3 h-3 bg-green-500 rounded-full"></span>
-                            Voted
-                          </span>
-                        ) : (
-                          <span class="text-gray-400 font-semibold flex items-center gap-2">
-                            <span class="w-3 h-3 bg-gray-300 rounded-full"></span>
-                            Waiting
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+        {/* Cards Grid - Always visible */}
+        <div class="mb-6">
+          <h2 class="text-3xl font-bold text-white mb-6">
+            {revealed ? "Revealed Votes" : "Participants"}
+          </h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+            {revealed && revealData ? (
+              revealData.votes.map((vote, index) => (
+                <RevealCard
+                  key={vote.participantId}
+                  name={vote.name}
+                  value={vote.value}
+                  isHost={vote.isHost}
+                  hasVoted={true}
+                  revealed={revealed}
+                  delay={index * 100}
+                />
+              ))
+            ) : (
+              voteStatuses.map((status, index) => (
+                <RevealCard
+                  key={status.participantId}
+                  name={status.name}
+                  value=""
+                  isHost={status.isHost}
+                  hasVoted={status.hasVoted}
+                  revealed={revealed}
+                  delay={index * 100}
+                />
+              ))
+            )}
           </div>
+        </div>
 
-          {/* Controls & Stats Panel */}
-          <div class="space-y-6">
+        {/* Controls & Stats */}
+        <div class="max-w-6xl mx-auto">
+          <div class="grid md:grid-cols-3 gap-6">
             {/* Status Card */}
             <div class="bg-white rounded-2xl shadow-xl p-6">
               <h3 class="text-lg font-bold text-gray-800 mb-3">Status</h3>

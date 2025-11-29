@@ -3,6 +3,7 @@ import { route } from "preact-router";
 import type { RoutableProps } from "preact-router";
 import { PlanningPokerConnection } from "../lib/signalr";
 import { CardGrid } from "../components/CardGrid";
+import { RevealCard } from "../components/RevealCard";
 import type { RevealResponse, EstimationScale } from "../types";
 
 interface ParticipantSessionProps extends RoutableProps {
@@ -161,14 +162,12 @@ export function ParticipantSession({ code, participantId, scale }: ParticipantSe
 
         {/* Revealed Results */}
         {revealed && revealData && (
-          <div class="bg-white rounded-2xl shadow-xl p-6">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">Results</h2>
-
+          <div>
             {/* Stats Summary */}
             {(revealData.stats.min || revealData.stats.max || revealData.stats.average) && (
               <div class="grid grid-cols-3 gap-4 mb-6">
                 {revealData.stats.min && (
-                  <div class="text-center p-4 bg-blue-50 rounded-xl">
+                  <div class="text-center p-4 bg-white rounded-xl shadow-lg">
                     <div class="text-sm text-gray-600">Min</div>
                     <div class="text-2xl font-bold text-blue-600">
                       {revealData.stats.min}
@@ -176,7 +175,7 @@ export function ParticipantSession({ code, participantId, scale }: ParticipantSe
                   </div>
                 )}
                 {revealData.stats.max && (
-                  <div class="text-center p-4 bg-purple-50 rounded-xl">
+                  <div class="text-center p-4 bg-white rounded-xl shadow-lg">
                     <div class="text-sm text-gray-600">Max</div>
                     <div class="text-2xl font-bold text-purple-600">
                       {revealData.stats.max}
@@ -184,7 +183,7 @@ export function ParticipantSession({ code, participantId, scale }: ParticipantSe
                   </div>
                 )}
                 {revealData.stats.average && (
-                  <div class="text-center p-4 bg-green-50 rounded-xl">
+                  <div class="text-center p-4 bg-white rounded-xl shadow-lg">
                     <div class="text-sm text-gray-600">Avg</div>
                     <div class="text-2xl font-bold text-green-600">
                       {revealData.stats.average.toFixed(1)}
@@ -194,33 +193,21 @@ export function ParticipantSession({ code, participantId, scale }: ParticipantSe
               </div>
             )}
 
-            {/* All Votes */}
-            <div class="space-y-2">
-              {revealData.votes.map((vote) => (
+            {/* Cards Grid */}
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {revealData.votes.map((vote, index) => (
                 <div
                   key={vote.participantId}
-                  class={`flex items-center justify-between p-4 rounded-xl ${
-                    vote.participantId === participantId
-                      ? "bg-indigo-50 border-2 border-indigo-200"
-                      : "bg-gray-50"
-                  }`}
+                  class={vote.participantId === participantId ? "ring-4 ring-yellow-400 rounded-2xl" : ""}
                 >
-                  <div class="flex items-center gap-2">
-                    <span class="font-semibold text-gray-800">
-                      {vote.name}
-                      {vote.participantId === participantId && (
-                        <span class="ml-2 text-xs text-indigo-600">(You)</span>
-                      )}
-                    </span>
-                    {vote.isHost && (
-                      <span class="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded-full">
-                        HOST
-                      </span>
-                    )}
-                  </div>
-                  <div class="text-2xl font-bold text-indigo-600">
-                    {vote.value || "-"}
-                  </div>
+                  <RevealCard
+                    name={vote.name}
+                    value={vote.value}
+                    isHost={vote.isHost}
+                    hasVoted={true}
+                    revealed={revealed}
+                    delay={index * 100}
+                  />
                 </div>
               ))}
             </div>
