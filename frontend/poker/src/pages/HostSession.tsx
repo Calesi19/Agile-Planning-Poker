@@ -97,8 +97,8 @@ export function HostSession({ code, participantId, scale }: HostSessionProps) {
     }
   };
 
-  const votedCount = voteStatuses.filter((s) => s.hasVoted).length;
-  const totalCount = participants.length;
+  const votedCount = voteStatuses.filter((s) => s.hasVoted && !s.isHost).length;
+  const totalCount = participants.filter((p) => !p.isHost).length;
   const canReveal = !revealed;
 
   if (loading) {
@@ -147,29 +147,33 @@ export function HostSession({ code, participantId, scale }: HostSessionProps) {
           </h2>
           <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
             {revealed && revealData ? (
-              revealData.votes.map((vote, index) => (
-                <RevealCard
-                  key={vote.participantId}
-                  name={vote.name}
-                  value={vote.value}
-                  isHost={vote.isHost}
-                  hasVoted={true}
-                  revealed={revealed}
-                  delay={index * 100}
-                />
-              ))
+              revealData.votes
+                .filter((vote) => !vote.isHost)
+                .map((vote, index) => (
+                  <RevealCard
+                    key={vote.participantId}
+                    name={vote.name}
+                    value={vote.value}
+                    isHost={vote.isHost}
+                    hasVoted={true}
+                    revealed={revealed}
+                    delay={index * 100}
+                  />
+                ))
             ) : (
-              voteStatuses.map((status, index) => (
-                <RevealCard
-                  key={status.participantId}
-                  name={status.name}
-                  value=""
-                  isHost={status.isHost}
-                  hasVoted={status.hasVoted}
-                  revealed={revealed}
-                  delay={index * 100}
-                />
-              ))
+              voteStatuses
+                .filter((status) => !status.isHost)
+                .map((status, index) => (
+                  <RevealCard
+                    key={status.participantId}
+                    name={status.name}
+                    value=""
+                    isHost={status.isHost}
+                    hasVoted={status.hasVoted}
+                    revealed={revealed}
+                    delay={index * 100}
+                  />
+                ))
             )}
           </div>
         </div>

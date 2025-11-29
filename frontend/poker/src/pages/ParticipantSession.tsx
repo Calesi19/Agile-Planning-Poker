@@ -195,21 +195,23 @@ export function ParticipantSession({ code, participantId, scale }: ParticipantSe
 
             {/* Cards Grid */}
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {revealData.votes.map((vote, index) => (
-                <div
-                  key={vote.participantId}
-                  class={vote.participantId === participantId ? "ring-4 ring-yellow-400 rounded-2xl" : ""}
-                >
-                  <RevealCard
-                    name={vote.name}
-                    value={vote.value}
-                    isHost={vote.isHost}
-                    hasVoted={true}
-                    revealed={revealed}
-                    delay={index * 100}
-                  />
-                </div>
-              ))}
+              {revealData.votes
+                .filter((vote) => !vote.isHost)
+                .map((vote, index) => (
+                  <div
+                    key={vote.participantId}
+                    class={vote.participantId === participantId ? "ring-4 ring-yellow-400 rounded-2xl" : ""}
+                  >
+                    <RevealCard
+                      name={vote.name}
+                      value={vote.value}
+                      isHost={vote.isHost}
+                      hasVoted={true}
+                      revealed={revealed}
+                      delay={index * 100}
+                    />
+                  </div>
+                ))}
             </div>
           </div>
         )}
