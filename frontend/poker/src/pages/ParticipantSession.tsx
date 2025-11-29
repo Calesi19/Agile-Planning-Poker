@@ -138,14 +138,36 @@ export function ParticipantSession({ code, participantId, scale }: ParticipantSe
         {/* Status Banner */}
         <div class="text-center mb-8">
           {revealed ? (
-            <div class="bg-white rounded-2xl shadow-xl p-6 inline-block">
-              <div class="text-2xl font-bold text-green-600 mb-2">Votes Revealed!</div>
-              {myVote && myVote.value && (
-                <div class="text-gray-600">
-                  Your vote:{" "}
-                  <span class="text-3xl font-bold text-indigo-600">{myVote.value}</span>
-                </div>
-              )}
+            <div class="bg-white rounded-2xl shadow-xl p-6 inline-block max-w-md w-full">
+              <div class="text-2xl font-bold text-green-600 mb-4">Votes Revealed!</div>
+              <div class="grid grid-cols-4 gap-3 text-center">
+                {myVote && myVote.value && (
+                  <div>
+                    <div class="text-xs text-gray-500 mb-1">You</div>
+                    <div class="text-2xl font-bold text-indigo-600">{myVote.value}</div>
+                  </div>
+                )}
+                {revealData?.stats.min && (
+                  <div>
+                    <div class="text-xs text-gray-500 mb-1">Min</div>
+                    <div class="text-2xl font-bold text-blue-600">{revealData.stats.min}</div>
+                  </div>
+                )}
+                {revealData?.stats.max && (
+                  <div>
+                    <div class="text-xs text-gray-500 mb-1">Max</div>
+                    <div class="text-2xl font-bold text-purple-600">{revealData.stats.max}</div>
+                  </div>
+                )}
+                {revealData?.stats.average && (
+                  <div>
+                    <div class="text-xs text-gray-500 mb-1">Avg</div>
+                    <div class="text-2xl font-bold text-green-600">
+                      {revealData.stats.average.toFixed(1)}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           ) : selectedCard ? (
             <div class="bg-white rounded-2xl shadow-xl p-6 inline-block">
@@ -177,36 +199,6 @@ export function ParticipantSession({ code, participantId, scale }: ParticipantSe
         {/* Revealed Results */}
         {revealed && revealData && (
           <div>
-            {/* Stats Summary */}
-            {(revealData.stats.min || revealData.stats.max || revealData.stats.average) && (
-              <div class="grid grid-cols-3 gap-4 mb-6">
-                {revealData.stats.min && (
-                  <div class="text-center p-4 bg-white rounded-xl shadow-lg">
-                    <div class="text-sm text-gray-600">Min</div>
-                    <div class="text-2xl font-bold text-blue-600">
-                      {revealData.stats.min}
-                    </div>
-                  </div>
-                )}
-                {revealData.stats.max && (
-                  <div class="text-center p-4 bg-white rounded-xl shadow-lg">
-                    <div class="text-sm text-gray-600">Max</div>
-                    <div class="text-2xl font-bold text-purple-600">
-                      {revealData.stats.max}
-                    </div>
-                  </div>
-                )}
-                {revealData.stats.average && (
-                  <div class="text-center p-4 bg-white rounded-xl shadow-lg">
-                    <div class="text-sm text-gray-600">Avg</div>
-                    <div class="text-2xl font-bold text-green-600">
-                      {revealData.stats.average.toFixed(1)}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
             {/* Cards Grid */}
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {revealData.votes
