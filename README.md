@@ -222,6 +222,18 @@ Agile-Planning-Poker/
 
 ### Frontend
 
+#### Option 1: GitHub Pages (Recommended)
+
+This repository includes automated deployment to GitHub Pages:
+
+1. See [`.github/DEPLOY.md`](.github/DEPLOY.md) for detailed setup instructions
+2. Enable GitHub Pages in repository settings (Settings → Pages → Source: GitHub Actions)
+3. (Optional) Set `VITE_API_URL` variable in repository settings to point to your backend
+4. Push to main branch or manually trigger the workflow
+5. Your app will be deployed to `https://[username].github.io/Agile-Planning-Poker/`
+
+#### Option 2: Manual Deployment
+
 1. Update `.env` with your production backend URL:
    ```env
    VITE_API_URL=https://your-api-domain.com
