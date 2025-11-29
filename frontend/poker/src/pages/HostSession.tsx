@@ -2,7 +2,6 @@ import { useState, useEffect } from "preact/hooks";
 import { route } from "preact-router";
 import type { RoutableProps } from "preact-router";
 import { PlanningPokerConnection } from "../lib/signalr";
-import { api } from "../lib/api";
 import type { Participant, VoteStatus, RevealResponse } from "../types";
 
 interface HostSessionProps extends RoutableProps {
@@ -12,6 +11,7 @@ interface HostSessionProps extends RoutableProps {
 }
 
 export function HostSession({ code, participantId, scale }: HostSessionProps) {
+  const [connection, setConnection] = useState<PlanningPokerConnection | null>(null);
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [voteStatuses, setVoteStatuses] = useState<VoteStatus[]>([]);
   const [revealData, setRevealData] = useState<RevealResponse | null>(null);
@@ -53,6 +53,7 @@ export function HostSession({ code, participantId, scale }: HostSessionProps) {
     conn
       .start()
       .then(() => {
+        setConnection(conn);
         setLoading(false);
       })
       .catch((err) => {
@@ -66,28 +67,28 @@ export function HostSession({ code, participantId, scale }: HostSessionProps) {
   }, [code, participantId]);
 
   const handleReveal = async () => {
-    if (!code) return;
+    if (!connection) return;
     try {
-      await api.reveal(code);
+      await connection.revealVotes();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to reveal votes");
     }
   };
 
   const handleReset = async () => {
-    if (!code) return;
+    if (!connection) return;
     try {
-      await api.reset(code);
+      await connection.resetVotes();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to reset votes");
     }
   };
 
   const handleEndSession = async () => {
-    if (!code) return;
+    if (!connection) return;
     if (confirm("Are you sure you want to end this session? All participants will be disconnected.")) {
       try {
-        await api.endSession(code);
+        await connection.endSession();
         route("/");
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to end session");
@@ -97,7 +98,7 @@ export function HostSession({ code, participantId, scale }: HostSessionProps) {
 
   const votedCount = voteStatuses.filter((s) => s.hasVoted).length;
   const totalCount = participants.length;
-  const canReveal = !revealed && votedCount > 0;
+  const canReveal = !revealed;
 
   if (loading) {
     return (
