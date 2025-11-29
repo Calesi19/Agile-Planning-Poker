@@ -87,9 +87,19 @@ artifacts/
 *.rar
 *.7z
 
+# Frontend
+**/node_modules/
+**/dist/
+**/.env
+**/.env.local
+**/package-lock.json
+**/pnpm-lock.yaml
+**/yarn.lock
 
-
-
+# PWA
+**/dev-dist/
+**/sw.js
+**/workbox-*.js
 
 
 

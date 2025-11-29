@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="cardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#a855f7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Card background -->
+  <rect x="15" y="10" width="70" height="80" rx="8" fill="url(#cardGradient)" />
+
+  <!-- Number on card -->
+  <text x="50" y="60" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="white" text-anchor="middle">5</text>
+</svg>
