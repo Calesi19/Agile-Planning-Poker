@@ -29,7 +29,6 @@
 *.vspscc
 *.vssscc
 *.scc
-*.json
 *.sql
 *.sonarqube
 # Project files to ignore
@@ -92,7 +91,6 @@ artifacts/
 **/dist/
 **/.env
 **/.env.local
-**/package-lock.json
 **/pnpm-lock.yaml
 **/yarn.lock
 
