@@ -1,0 +1,38 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# CI/CD
+.github
+.vscode
+.idea
+
+# Documentation
+*.md
+!README.md
+
+# Frontend
+frontend/poker/node_modules
+frontend/poker/dist
+frontend/poker/.env
+frontend/poker/.env.local
+frontend/poker/dev-dist
+
+# Backend
+backend/Poker.Api/bin
+backend/Poker.Api/obj
+backend/**/bin
+backend/**/obj
+backend/**/.vs
+
+# .NET
+**/appsettings.Development.json
+**/*.user
+**/*.suo
+**/*.cache
+**/*.log
+
+# OS
+.DS_Store
+Thumbs.db

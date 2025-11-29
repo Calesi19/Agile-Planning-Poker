@@ -31,6 +31,10 @@ var app = builder.Build();
 // Configure middleware
 app.UseCors("AllowAll");
 
+// Serve static files from wwwroot
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -48,5 +52,20 @@ app.MapHub<PlanningPokerHub>("/hub/planning-poker");
 app.MapGet("/api/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }))
     .WithName("HealthCheck")
     .WithOpenApi();
+
+// SPA fallback - serve index.html for all non-API routes
+app.MapFallback(async context =>
+{
+    // Don't fallback for API routes or SignalR hub
+    if (context.Request.Path.StartsWithSegments("/api") ||
+        context.Request.Path.StartsWithSegments("/hub"))
+    {
+        context.Response.StatusCode = 404;
+        return;
+    }
+
+    context.Response.ContentType = "text/html";
+    await context.Response.SendFileAsync(Path.Combine(app.Environment.WebRootPath ?? "wwwroot", "index.html"));
+});
 
 app.Run();
