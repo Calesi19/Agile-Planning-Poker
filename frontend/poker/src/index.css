@@ -81,13 +81,23 @@ html, body, #app {
 /* Diamond pattern for card backs */
 .card-back-pattern {
   background-color: #ffffff;
-  border: 8px solid #ffffff;
+  border: 4px solid #ffffff;
+}
+
+@media (min-width: 768px) {
+  .card-back-pattern {
+    border: 8px solid #ffffff;
+  }
+
+  .card-back-pattern::before {
+    inset: 8px;
+  }
 }
 
 .card-back-pattern::before {
   content: "";
   position: absolute;
-  inset: 8px;
+  inset: 4px;
   background-color: #dc2626;
   background-image:
     repeating-linear-gradient(
@@ -104,20 +114,36 @@ html, body, #app {
       rgba(255, 255, 255, 0.1) 10px,
       rgba(255, 255, 255, 0.1) 20px
     );
-  border-radius: 8px;
+  border-radius: 12px;
   pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .card-back-pattern::before {
+    border-radius: 8px;
+  }
 }
 
 /* Black variant for unvoted cards */
 .card-back-pattern-black {
   background-color: #ffffff;
-  border: 8px solid #ffffff;
+  border: 4px solid #ffffff;
+}
+
+@media (min-width: 768px) {
+  .card-back-pattern-black {
+    border: 8px solid #ffffff;
+  }
+
+  .card-back-pattern-black::before {
+    inset: 8px;
+  }
 }
 
 .card-back-pattern-black::before {
   content: "";
   position: absolute;
-  inset: 8px;
+  inset: 4px;
   background-color: #1f2937;
   background-image:
     repeating-linear-gradient(
@@ -134,6 +160,12 @@ html, body, #app {
       rgba(255, 255, 255, 0.1) 10px,
       rgba(255, 255, 255, 0.1) 20px
     );
-  border-radius: 8px;
+  border-radius: 12px;
   pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .card-back-pattern-black::before {
+    border-radius: 8px;
+  }
 }
