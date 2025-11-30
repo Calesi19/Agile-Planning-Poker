@@ -51,7 +51,7 @@ export function JoinSession({ code }: JoinSessionProps) {
   };
 
   return (
-    <div class="min-h-screen bg-gradient-to-br from-orange-500 via-rose-500 to-pink-500 flex items-center justify-center p-4">
+    <div class="min-h-screen poker-table-bg flex items-center justify-center p-4">
       <div class="max-w-md w-full">
         <button
           onClick={() => route("/")}

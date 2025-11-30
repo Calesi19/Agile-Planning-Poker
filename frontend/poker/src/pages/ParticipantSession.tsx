@@ -92,7 +92,7 @@ export function ParticipantSession({ code, participantId, scale }: ParticipantSe
 
   if (loading) {
     return (
-      <div class="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center">
+      <div class="min-h-screen poker-table-bg flex items-center justify-center">
         <div class="text-white text-2xl">Connecting...</div>
       </div>
     );
@@ -101,7 +101,7 @@ export function ParticipantSession({ code, participantId, scale }: ParticipantSe
   const myVote = revealData?.votes.find((v) => v.participantId === participantId);
 
   return (
-    <div class="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-4">
+    <div class="min-h-screen poker-table-bg p-4">
       <div class="max-w-4xl mx-auto">
         {/* Header */}
         <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 mb-6 text-white">

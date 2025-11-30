@@ -106,14 +106,14 @@ export function HostSession({ code, participantId, scale }: HostSessionProps) {
 
   if (loading) {
     return (
-      <div class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700 flex items-center justify-center">
+      <div class="min-h-screen poker-table-bg flex items-center justify-center">
         <div class="text-white text-2xl">Connecting...</div>
       </div>
     );
   }
 
   return (
-    <div class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700 p-4 md:p-8">
+    <div class="min-h-screen poker-table-bg p-4 md:p-8">
       <div class="max-w-6xl mx-auto">
         {/* Header */}
         <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-6 text-white">

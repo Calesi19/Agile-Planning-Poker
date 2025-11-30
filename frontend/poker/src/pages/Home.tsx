@@ -3,7 +3,7 @@ import type { RoutableProps } from "preact-router";
 
 export function Home(_props: RoutableProps) {
   return (
-    <div class="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center p-4">
+    <div class="min-h-screen poker-table-bg flex items-center justify-center p-4">
       <div class="max-w-md w-full">
         <div class="text-center mb-12">
           <h1 class="text-6xl font-bold text-white mb-4 drop-shadow-lg">

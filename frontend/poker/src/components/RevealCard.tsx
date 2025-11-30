@@ -35,12 +35,12 @@ export function RevealCard({ name, value, isHost, hasVoted, revealed, delay }: R
         <div
           class={`absolute inset-0 backface-hidden rounded-2xl shadow-xl flex items-center justify-center transition-all ${
             hasVoted
-              ? "bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500"
+              ? "card-back-pattern"
               : "bg-gradient-to-br from-gray-300 via-gray-400 to-gray-500"
           }`}
         >
-          <div class="text-white text-center">
-            <div class="text-lg font-bold mb-1">{name}</div>
+          <div class="text-white text-center relative z-10">
+            <div class="text-lg font-bold mb-1 drop-shadow-lg">{name}</div>
             {isHost && (
               <div class="text-xs bg-white/20 px-2 py-1 rounded-full inline-block">
                 HOST

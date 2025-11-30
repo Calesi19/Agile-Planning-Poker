@@ -51,7 +51,7 @@ export function CreateSession(_props: RoutableProps) {
   };
 
   return (
-    <div class="min-h-screen bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 flex items-center justify-center p-4">
+    <div class="min-h-screen poker-table-bg flex items-center justify-center p-4">
       <div class="max-w-2xl w-full">
         <button
           onClick={() => route("/")}
