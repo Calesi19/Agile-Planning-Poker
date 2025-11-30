@@ -33,11 +33,10 @@ export function RevealCard({ name, value, isHost, hasVoted, revealed, delay }: R
       >
         {/* Card Back (visible before flip) */}
         <div
-          class={`absolute inset-0 backface-hidden rounded-2xl shadow-xl flex items-center justify-center transition-all ${
-            hasVoted
-              ? "card-back-pattern"
-              : "card-back-pattern-black"
-          }`}
+          class={`absolute inset-0 backface-hidden rounded-2xl shadow-xl flex items-center justify-center transition-all transition-opacity duration-300 ${
+            hasVoted ? "card-back-pattern" : "card-back-pattern-black"
+          } ${isFlipped ? "opacity-0" : "opacity-100"}`}
+          aria-hidden={isFlipped}
         >
           <div class="text-white text-center relative z-10">
             <div class="text-lg font-bold mb-1 drop-shadow-lg">{name}</div>
@@ -53,7 +52,11 @@ export function RevealCard({ name, value, isHost, hasVoted, revealed, delay }: R
         </div>
 
         {/* Card Front (visible after flip) */}
-        <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-2xl bg-white shadow-xl border-4 border-indigo-500 flex flex-col items-center justify-center p-4">
+        <div
+          class={`absolute inset-0 backface-hidden rotate-y-180 rounded-2xl bg-white shadow-xl border-4 border-indigo-500 flex flex-col items-center justify-center p-4 transition-opacity duration-300 ${
+            isFlipped ? "opacity-100" : "opacity-0"
+          }`}
+        >
           <div class="text-6xl font-bold text-indigo-600 mb-2">{value || "?"}</div>
           <div class="text-sm font-semibold text-gray-700 text-center">{name}</div>
           {isHost && (
