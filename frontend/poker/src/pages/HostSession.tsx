@@ -196,28 +196,13 @@ export function HostSession({ code, participantId, scale }: HostSessionProps) {
 
         {/* Controls & Stats */}
         <div class="max-w-6xl mx-auto">
-          <div class="grid md:grid-cols-3 gap-6">
-            {/* Status Card */}
+          <div class="grid md:grid-cols-2 gap-6">
+            {/* Status & Statistics Card */}
             <div class="bg-white rounded-2xl shadow-xl p-6">
-              <h3 class="text-lg font-bold text-gray-800 mb-3">Status</h3>
-              <div class="text-center">
-                {revealed ? (
-                  <div class="text-green-600 font-bold text-xl">Votes Revealed</div>
-                ) : (
-                  <>
-                    <div class="text-4xl font-bold text-indigo-600 mb-2">
-                      {votedCount}/{totalCount}
-                    </div>
-                    <div class="text-sm text-gray-600">votes cast</div>
-                  </>
-                )}
-              </div>
-            </div>
-
-            {/* Stats Card */}
-            {revealed && revealData && (
-              <div class="bg-white rounded-2xl shadow-xl p-6">
-                <h3 class="text-lg font-bold text-gray-800 mb-3">Statistics</h3>
+              <h3 class="text-lg font-bold text-gray-800 mb-3">
+                {revealed ? "Statistics" : "Status"}
+              </h3>
+              {revealed && revealData ? (
                 <div class="space-y-3">
                   {revealData.stats.min && (
                     <div class="flex justify-between">
@@ -255,8 +240,15 @@ export function HostSession({ code, participantId, scale }: HostSessionProps) {
                     ))}
                   </div>
                 </div>
-              </div>
-            )}
+              ) : (
+                <div class="text-center">
+                  <div class="text-4xl font-bold text-indigo-600 mb-2">
+                    {votedCount}/{totalCount}
+                  </div>
+                  <div class="text-sm text-gray-600">votes cast</div>
+                </div>
+              )}
+            </div>
 
             {/* Controls */}
             <div class="space-y-3">
