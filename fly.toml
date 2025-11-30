@@ -1,5 +1,7 @@
-# fly.toml app configuration file
+# fly.toml app configuration file generated for agile-planning-poker on 2025-11-29T17:21:54Z
+#
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
 app = 'agile-planning-poker'
 primary_region = 'iad'
@@ -18,10 +20,4 @@ primary_region = 'iad'
   memory = '512mb'
   cpu_kind = 'shared'
   cpus = 1
-
-[env]
-  ASPNETCORE_ENVIRONMENT = "Production"
-
-[[statics]]
-  guest_path = "/app/wwwroot"
-  url_prefix = "/"
+  memory_mb = 512
