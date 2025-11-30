@@ -161,7 +161,7 @@ export function HostSession({ code, participantId, scale }: HostSessionProps) {
           <h2 class="text-3xl font-bold text-white mb-6">
             {revealed ? "Revealed Votes" : "Participants"}
           </h2>
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+          <div class="grid grid-cols-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
             {revealed && revealData ? (
               revealData.votes
                 .filter((vote) => !vote.isHost)

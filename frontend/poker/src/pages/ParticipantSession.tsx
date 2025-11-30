@@ -200,7 +200,7 @@ export function ParticipantSession({ code, participantId, scale }: ParticipantSe
         {revealed && revealData && (
           <div>
             {/* Cards Grid */}
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-4 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {revealData.votes
                 .filter((vote) => !vote.isHost)
                 .map((vote, index) => (
