@@ -36,7 +36,7 @@ export function RevealCard({ name, value, isHost, hasVoted, revealed, delay }: R
           class={`absolute inset-0 backface-hidden rounded-2xl shadow-xl flex items-center justify-center transition-all ${
             hasVoted
               ? "card-back-pattern"
-              : "bg-gradient-to-br from-gray-300 via-gray-400 to-gray-500"
+              : "card-back-pattern-black"
           }`}
         >
           <div class="text-white text-center relative z-10">
