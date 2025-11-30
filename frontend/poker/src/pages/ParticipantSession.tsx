@@ -13,10 +13,10 @@ interface ParticipantSessionProps extends RoutableProps {
 }
 
 const SCALE_CARDS: Record<EstimationScale, string[]> = {
-  fibonacci: ["0", "1", "2", "3", "5", "8", "13", "21", "34", "?", "☕"],
-  modifiedFibonacci: ["0", "0.5", "1", "2", "3", "5", "8", "13", "20", "40", "100", "?", "☕"],
-  tshirt: ["XS", "S", "M", "L", "XL", "XXL", "?", "☕"],
-  powersOf2: ["1", "2", "4", "8", "16", "32", "64", "?", "☕"],
+  fibonacci: ["0", "1", "2", "3", "5", "8", "13", "21", "34", "?"],
+  modifiedFibonacci: ["0", "0.5", "1", "2", "3", "5", "8", "13", "20", "40", "100", "?"],
+  tshirt: ["XS", "S", "M", "L", "XL", "XXL", "?"],
+  powersOf2: ["1", "2", "4", "8", "16", "32", "64", "?"],
 };
 
 export function ParticipantSession({ code, participantId, scale }: ParticipantSessionProps) {

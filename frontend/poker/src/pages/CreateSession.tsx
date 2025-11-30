@@ -8,22 +8,22 @@ const SCALE_OPTIONS: { value: EstimationScale; label: string; description: strin
   {
     value: "fibonacci",
     label: "Fibonacci",
-    description: "0, 1, 2, 3, 5, 8, 13, 21, 34, ?, ☕",
+    description: "0, 1, 2, 3, 5, 8, 13, 21, 34, ?",
   },
   {
     value: "modifiedFibonacci",
     label: "Modified Fibonacci",
-    description: "0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100, ?, ☕",
+    description: "0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100, ?",
   },
   {
     value: "tshirt",
     label: "T-Shirt Sizes",
-    description: "XS, S, M, L, XL, XXL, ?, ☕",
+    description: "XS, S, M, L, XL, XXL, ?",
   },
   {
     value: "powersOf2",
     label: "Powers of 2",
-    description: "1, 2, 4, 8, 16, 32, 64, ?, ☕",
+    description: "1, 2, 4, 8, 16, 32, 64, ?",
   },
 ];
 
