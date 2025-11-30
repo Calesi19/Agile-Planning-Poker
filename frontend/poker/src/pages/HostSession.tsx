@@ -101,7 +101,7 @@ export function HostSession({ code, participantId, scale }: HostSessionProps) {
   const votedCount = voteStatuses.filter((s) => s.hasVoted && !s.isHost).length;
   const totalCount = participants.filter((p) => !p.isHost).length;
   const canReveal = !revealed;
-  const joinUrl = `${window.location.origin}/#/join/${code}`;
+  const joinUrl = `${window.location.origin}${window.location.pathname.includes('Agile-Planning-Poker') ? '/Agile-Planning-Poker' : ''}#/join/${code}`;
   const [showQRModal, setShowQRModal] = useState(false);
 
   if (loading) {
