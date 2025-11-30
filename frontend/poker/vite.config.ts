@@ -16,23 +16,23 @@ export default defineConfig({
         name: "Planning Poker",
         short_name: "Poker",
         description: "Real-time agile estimation for distributed teams",
-        theme_color: "#6366f1",
-        background_color: "#ffffff",
+        theme_color: "#1a5c3a",
+        background_color: "#0d3d28",
         display: "standalone",
         start_url: "/",
         icons: [
           {
-            src: "pwa-192x192.png",
+            src: "/pwa-192x192.png",
             sizes: "192x192",
             type: "image/png",
           },
           {
-            src: "pwa-512x512.png",
+            src: "/pwa-512x512.png",
             sizes: "512x512",
             type: "image/png",
           },
           {
-            src: "pwa-512x512.png",
+            src: "/pwa-512x512.png",
             sizes: "512x512",
             type: "image/png",
             purpose: "any maskable",
