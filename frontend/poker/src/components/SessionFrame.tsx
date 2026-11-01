@@ -100,7 +100,10 @@ export function SessionFrame({
       <div class="session">
         <header class="session-bar">
           <div class="min-w-0">
-            <h1 class="session-title truncate font-display text-lg font-semibold leading-tight sm:text-xl">Table {code}</h1>
+            <h1 class="session-title truncate font-display text-lg font-semibold leading-tight sm:text-xl">
+              <span class="max-[360px]:sr-only">Table </span>
+              {code}
+            </h1>
             <p class="truncate text-[0.8125rem] text-ivory-dim">{labelFor(scale)} deck</p>
           </div>
           {table.status === "reconnecting" && (
@@ -148,7 +151,7 @@ export function SessionFrame({
       {sheet === "invite" && (
         <Sheet title="Invite the team" onClose={closeSheet}>
           <div class="flex flex-col items-center gap-4">
-            <div class="rounded-xl bg-ivory p-3 leading-[0]">
+            <div class="invite-plate">
               <QRCodeSVG value={joinUrl} size={196} level="H" bgColor="#f7f3ea" fgColor="#14201c" />
             </div>
             <div class="text-center">
