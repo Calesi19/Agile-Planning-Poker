@@ -70,7 +70,10 @@ export function useTable(code?: string, participantId?: string, scaleCards: stri
       }, SWEEP_MS);
     });
 
-    conn.onSessionEnded(() => route("/"));
+    // SignalR treats a handler's return value as a reply, so this must not return route()'s.
+    conn.onSessionEnded(() => {
+      route("/");
+    });
     conn.onReconnecting(() => setStatus("reconnecting"));
     conn.onReconnected(() => {
       // Anything missed while away comes back from the rejoin, including a reveal.
