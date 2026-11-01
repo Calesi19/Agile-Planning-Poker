@@ -27,5 +27,5 @@ You can generate these from the `favicon.svg` file using any of these tools:
    convert favicon.svg -resize 180x180 apple-touch-icon.png
    ```
 
-The current `favicon.svg` is used as a placeholder and will work for basic development.
+`favicon.ico` is built from `favicon.svg` at 16, 32 and 48px. The PNG icons above still use the older logo.
 For production deployment, generate proper PNG icons using one of the methods above.
