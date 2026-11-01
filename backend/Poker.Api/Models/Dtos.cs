@@ -14,7 +14,8 @@ public record SessionResponse(
     string Scale,
     string[] Cards,
     List<ParticipantDto> Participants,
-    bool Revealed
+    bool Revealed,
+    string? HostKey = null
 );
 
 public record VoteStatusDto(string ParticipantId, string Name, bool HasVoted, bool IsHost);

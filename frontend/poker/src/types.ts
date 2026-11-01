@@ -11,6 +11,7 @@ export interface SessionResponse {
   cards: string[];
   participants: Participant[];
   revealed: boolean;
+  hostKey?: string | null;
 }
 
 export interface VoteStatus {

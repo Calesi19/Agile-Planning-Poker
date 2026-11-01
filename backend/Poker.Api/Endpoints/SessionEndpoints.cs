@@ -6,6 +6,8 @@ namespace Poker.Api.Endpoints;
 
 public static class SessionEndpoints
 {
+    private const string HostKeyHeader = "X-Host-Key";
+
     public static void MapSessionEndpoints(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/sessions");
@@ -33,6 +35,12 @@ public static class SessionEndpoints
         group.MapPost("/{code}/end", EndSession)
             .WithName("EndSession")
             .WithOpenApi();
+    }
+
+    // Results.Forbid() needs an authentication scheme, and this API has none.
+    private static IResult DealerOnly()
+    {
+        return Results.Json(new { error = "Only the dealer can do that" }, statusCode: StatusCodes.Status403Forbidden);
     }
 
     private static IResult CreateSession(
@@ -65,7 +73,8 @@ public static class SessionEndpoints
                 session.GetParticipantsList()
                     .Select(p => new ParticipantDto(p.Id, p.Name, p.IsHost))
                     .ToList(),
-                session.Revealed
+                session.Revealed,
+                session.HostKey
             );
 
             return Results.Ok(response);
@@ -158,12 +167,18 @@ public static class SessionEndpoints
 
     private static IResult RevealVotes(
         string code,
+        [FromHeader(Name = HostKeyHeader)] string? hostKey,
         InMemorySessionStore sessionStore)
     {
         var session = sessionStore.GetSession(code);
         if (session == null)
         {
             return Results.NotFound(new { error = "Session not found" });
+        }
+
+        if (!session.IsHostKey(hostKey))
+        {
+            return DealerOnly();
         }
 
         session.Revealed = true;
@@ -174,12 +189,18 @@ public static class SessionEndpoints
 
     private static IResult ResetVotes(
         string code,
+        [FromHeader(Name = HostKeyHeader)] string? hostKey,
         InMemorySessionStore sessionStore)
     {
         var session = sessionStore.GetSession(code);
         if (session == null)
         {
             return Results.NotFound(new { error = "Session not found" });
+        }
+
+        if (!session.IsHostKey(hostKey))
+        {
+            return DealerOnly();
         }
 
         session.ClearVotes();
@@ -189,6 +210,7 @@ public static class SessionEndpoints
 
     private static IResult EndSession(
         string code,
+        [FromHeader(Name = HostKeyHeader)] string? hostKey,
         InMemorySessionStore sessionStore,
         ILogger<Program> logger)
     {
@@ -196,6 +218,11 @@ public static class SessionEndpoints
         if (session == null)
         {
             return Results.NotFound(new { error = "Session not found" });
+        }
+
+        if (!session.IsHostKey(hostKey))
+        {
+            return DealerOnly();
         }
 
         sessionStore.RemoveSession(code);

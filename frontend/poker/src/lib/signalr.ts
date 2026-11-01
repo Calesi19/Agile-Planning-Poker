@@ -6,16 +6,25 @@ export class PlanningPokerConnection {
   private connection: signalR.HubConnection;
   private sessionCode: string;
   private participantId: string;
+  private hostKey: string;
 
-  constructor(sessionCode: string, participantId: string) {
+  constructor(sessionCode: string, participantId: string, hostKey = "") {
     this.sessionCode = sessionCode;
     this.participantId = participantId;
+    this.hostKey = hostKey;
 
     this.connection = new signalR.HubConnectionBuilder()
       .withUrl(HUB_URL)
       .withAutomaticReconnect()
       .configureLogging(signalR.LogLevel.Information)
       .build();
+
+    // A reconnect gets a new connection id, which isn't in the session's group yet.
+    this.connection.onreconnected(() => {
+      this.connection
+        .invoke("JoinSession", this.sessionCode, this.participantId)
+        .catch((err) => console.error("Error rejoining session:", err));
+    });
   }
 
   async start(): Promise<void> {
@@ -48,7 +57,7 @@ export class PlanningPokerConnection {
 
   async revealVotes(): Promise<void> {
     try {
-      await this.connection.invoke("RevealVotes", this.sessionCode);
+      await this.connection.invoke("RevealVotes", this.sessionCode, this.hostKey);
     } catch (err) {
       console.error("Error revealing votes:", err);
       throw err;
@@ -57,7 +66,7 @@ export class PlanningPokerConnection {
 
   async resetVotes(): Promise<void> {
     try {
-      await this.connection.invoke("ResetVotes", this.sessionCode);
+      await this.connection.invoke("ResetVotes", this.sessionCode, this.hostKey);
     } catch (err) {
       console.error("Error resetting votes:", err);
       throw err;
@@ -66,7 +75,7 @@ export class PlanningPokerConnection {
 
   async endSession(): Promise<void> {
     try {
-      await this.connection.invoke("EndSession", this.sessionCode);
+      await this.connection.invoke("EndSession", this.sessionCode, this.hostKey);
     } catch (err) {
       console.error("Error ending session:", err);
       throw err;

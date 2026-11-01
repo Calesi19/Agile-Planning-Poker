@@ -35,6 +35,14 @@ public class PlanningPokerHub : Hub
 
         // Broadcast updated participant list to all clients in the session
         await BroadcastParticipants(sessionCode, session);
+
+        // Catch up clients joining or rejoining partway through a round
+        await BroadcastVotingStatus(sessionCode, session);
+
+        if (session.Revealed)
+        {
+            await Clients.Caller.SendAsync("VotesRevealed", BuildRevealResponse(session));
+        }
     }
 
     public async Task CastVote(string sessionCode, string participantId, string value)
@@ -69,13 +77,15 @@ public class PlanningPokerHub : Hub
         await BroadcastVotingStatus(sessionCode, session);
     }
 
-    public async Task RevealVotes(string sessionCode)
+    public async Task RevealVotes(string sessionCode, string? hostKey)
     {
         var session = _sessionStore.GetSession(sessionCode);
         if (session == null)
         {
             return;
         }
+
+        RequireDealer(session, hostKey);
 
         session.Revealed = true;
         session.UpdateActivity();
@@ -83,19 +93,18 @@ public class PlanningPokerHub : Hub
         _logger.LogInformation("Votes revealed for session {SessionCode}", sessionCode);
 
         // Broadcast revealed votes and stats
-        var votes = BuildRevealedVotes(session);
-        var stats = CalculateStats(session);
-
-        await Clients.Group(sessionCode).SendAsync("VotesRevealed", new RevealResponse(votes, stats));
+        await Clients.Group(sessionCode).SendAsync("VotesRevealed", BuildRevealResponse(session));
     }
 
-    public async Task ResetVotes(string sessionCode)
+    public async Task ResetVotes(string sessionCode, string? hostKey)
     {
         var session = _sessionStore.GetSession(sessionCode);
         if (session == null)
         {
             return;
         }
+
+        RequireDealer(session, hostKey);
 
         session.ClearVotes();
 
@@ -105,13 +114,15 @@ public class PlanningPokerHub : Hub
         await BroadcastVotingStatus(sessionCode, session);
     }
 
-    public async Task EndSession(string sessionCode)
+    public async Task EndSession(string sessionCode, string? hostKey)
     {
         var session = _sessionStore.GetSession(sessionCode);
         if (session == null)
         {
             return;
         }
+
+        RequireDealer(session, hostKey);
 
         _logger.LogInformation("Session {SessionCode} ended", sessionCode);
 
@@ -123,6 +134,19 @@ public class PlanningPokerHub : Hub
     {
         _logger.LogInformation("Client disconnected: {ConnectionId}", Context.ConnectionId);
         await base.OnDisconnectedAsync(exception);
+    }
+
+    private static void RequireDealer(Session session, string? hostKey)
+    {
+        if (!session.IsHostKey(hostKey))
+        {
+            throw new HubException("Only the dealer can do that.");
+        }
+    }
+
+    private RevealResponse BuildRevealResponse(Session session)
+    {
+        return new RevealResponse(BuildRevealedVotes(session), CalculateStats(session));
     }
 
     private async Task BroadcastParticipants(string sessionCode, Session session)

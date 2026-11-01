@@ -3,6 +3,7 @@ import { route } from "preact-router";
 import type { RoutableProps } from "preact-router";
 import { api } from "../lib/api";
 import { storage } from "../lib/storage";
+import { Room } from "../components/Room";
 
 interface JoinSessionProps extends RoutableProps {
   code?: string;
@@ -25,13 +26,13 @@ export function JoinSession({ code }: JoinSessionProps) {
     e.preventDefault();
     setError("");
 
-    if (!name.trim()) {
-      setError("Please enter your name");
+    if (!sessionCode.trim()) {
+      setError("Enter the table code from your dealer.");
       return;
     }
 
-    if (!sessionCode.trim()) {
-      setError("Please enter a session code");
+    if (!name.trim()) {
+      setError("Enter a name so the table knows who's playing.");
       return;
     }
 
@@ -45,73 +46,73 @@ export function JoinSession({ code }: JoinSessionProps) {
         `/participant/${session.sessionCode}?participantId=${session.participantId}&scale=${session.scale}`
       );
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to join session");
+      setError(err instanceof Error ? err.message : "Couldn't join that table");
       setLoading(false);
     }
   };
 
   return (
-    <div class="min-h-screen poker-table-bg flex items-center justify-center p-4">
-      <div class="max-w-md w-full">
-        <button
-          onClick={() => route("/")}
-          class="mb-6 text-white/80 hover:text-white flex items-center gap-2 text-lg"
-        >
-          ← Back
-        </button>
+    <Room title="Join a table · Planning Poker">
+      <div class="panel-page">
+        <div class="panel">
+          <button type="button" class="back-link mb-2" onClick={() => route("/")}>
+            ← Back
+          </button>
 
-        <div class="bg-white rounded-3xl shadow-2xl p-8">
-          <h1 class="text-4xl font-bold text-gray-800 mb-2">Join Session</h1>
-          <p class="text-gray-600 mb-8">Enter the session code to join</p>
+          <h1 class="t-title mb-1">Take a seat</h1>
+          <p class="mb-6 text-ivory-dim">Your dealer has the table code.</p>
 
-          <form onSubmit={handleSubmit} class="space-y-6">
+          <form onSubmit={handleSubmit} class="flex flex-col gap-5" noValidate>
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">
-                Session Code
+              <label class="field-label t-label" for="table-code">
+                Table code
               </label>
               <input
+                id="table-code"
                 type="text"
                 value={sessionCode}
                 onInput={(e) =>
                   setSessionCode((e.target as HTMLInputElement).value.toUpperCase())
                 }
-                placeholder="e.g., 4K9ZPQ"
-                class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-rose-500 focus:outline-none text-2xl font-bold text-center tracking-wider uppercase"
+                placeholder="4K9ZPQ"
+                class="field field-code"
                 maxLength={8}
                 disabled={loading}
+                autoComplete="off"
+                autoCapitalize="characters"
+                spellcheck={false}
               />
             </div>
 
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">
-                Your Name
+              <label class="field-label t-label" for="display-name">
+                Your name
               </label>
               <input
+                id="display-name"
                 type="text"
                 value={name}
                 onInput={(e) => setName((e.target as HTMLInputElement).value)}
-                placeholder="Enter your display name"
-                class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-rose-500 focus:outline-none text-lg"
+                placeholder="What the table calls you"
+                class="field"
+                maxLength={32}
                 disabled={loading}
+                autoComplete="nickname"
               />
             </div>
 
             {error && (
-              <div class="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-xl">
+              <div class="notice" role="alert">
                 {error}
               </div>
             )}
 
-            <button
-              type="submit"
-              disabled={loading}
-              class="w-full bg-rose-500 hover:bg-rose-600 text-white rounded-xl py-4 px-8 text-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-            >
-              {loading ? "Joining..." : "Join Session"}
+            <button type="submit" disabled={loading} class="btn btn-primary w-full">
+              {loading ? "Finding your seat…" : "Take a seat"}
             </button>
           </form>
         </div>
       </div>
-    </div>
+    </Room>
   );
 }

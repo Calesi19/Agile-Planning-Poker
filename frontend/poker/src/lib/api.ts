@@ -54,9 +54,12 @@ export const api = {
     }
   },
 
-  async reveal(code: string): Promise<void> {
+  async reveal(code: string, hostKey: string): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/api/sessions/${code}/reveal`, {
       method: "POST",
+      headers: {
+        "X-Host-Key": hostKey,
+      },
     });
 
     if (!response.ok) {
@@ -65,9 +68,12 @@ export const api = {
     }
   },
 
-  async reset(code: string): Promise<void> {
+  async reset(code: string, hostKey: string): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/api/sessions/${code}/reset`, {
       method: "POST",
+      headers: {
+        "X-Host-Key": hostKey,
+      },
     });
 
     if (!response.ok) {
@@ -76,9 +82,12 @@ export const api = {
     }
   },
 
-  async endSession(code: string): Promise<void> {
+  async endSession(code: string, hostKey: string): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/api/sessions/${code}/end`, {
       method: "POST",
+      headers: {
+        "X-Host-Key": hostKey,
+      },
     });
 
     if (!response.ok) {

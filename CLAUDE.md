@@ -52,6 +52,7 @@ The backend uses ASP.NET Core Minimal APIs (not Controllers) with SignalR for re
 - **In-memory storage only**: All sessions stored in `ConcurrentDictionary`, no database
 - **SignalR groups**: Each session code maps to a SignalR group for targeted broadcasts
 - **Thread-safe collections**: `ConcurrentDictionary` used for Participants and Votes
+- **Dealer authorization**: `Session.HostKey` is a random secret returned only by session creation and never broadcast. Reveal, reset, and end require it (hub argument, or `X-Host-Key` header on REST). Participant IDs can't authorize anything because they're broadcast to the table
 - **Session cleanup**: Background service (`SessionCleanupService`) removes inactive sessions every 10 minutes (2-hour inactivity threshold)
 
 **Session Code Generation:**
@@ -63,7 +64,7 @@ The backend uses ASP.NET Core Minimal APIs (not Controllers) with SignalR for re
 
 **Core Pattern: Preact + SignalR Client + Local Storage**
 
-- **Router**: `preact-router` for client-side routing
+- **Router**: `preact-router` with hash history (`lib/hashHistory.ts`), so deep links and QR codes work on GitHub Pages' sub-path, in Capacitor, and on reload
 - **State Management**: Component-level state (no global store like Redux)
 - **Styling**: Tailwind CSS v4 with `@tailwindcss/vite`
 - **Real-time**: `@microsoft/signalr` for WebSocket connection
@@ -73,6 +74,10 @@ The backend uses ASP.NET Core Minimal APIs (not Controllers) with SignalR for re
 - **lib/api.ts** - REST API client functions
 - **lib/signalr.ts** - `PlanningPokerConnection` class wrapping SignalR hub connection
 - **lib/storage.ts** - LocalStorage helpers for persisting participant info
+- **lib/useTable.ts** - Session hook shared by host and participant pages (connection, seats, round phase)
+- **lib/round.ts** - Client-side round summary: average, median, agreement, consensus and debate verdicts
+- **lib/geometry.ts** - Seat placement around the oval table
+- **components/PokerTable.tsx, Hand.tsx, PlayingCard.tsx** - Table seats, the player's hand, card faces and backs
 - **types.ts** - TypeScript interfaces matching backend DTOs
 - **pages/** - Route components (Home, CreateSession, JoinSession, HostSession, ParticipantSession)
 
@@ -96,7 +101,7 @@ The backend uses ASP.NET Core Minimal APIs (not Controllers) with SignalR for re
 1. Host clicks "Reveal" → Hub sets `Session.Revealed = true`
 2. Hub calculates stats (min, max, average, distribution)
 3. Hub broadcasts `VotesRevealed` with full vote data + stats
-4. All clients render revealed cards and statistics
+4. All clients flip every card from a single state change, then show the ticker and verdict (card values aren't in the DOM before this)
 
 ### CORS Configuration
 **IMPORTANT:** The backend currently allows all origins for development:
